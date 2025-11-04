@@ -1,11 +1,11 @@
-import React from 'react';
+import { Link } from 'react-router-dom';
 import './Footer.css';
 const Footer = () => {
   return (
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-section">
-          <h3>ShopName</h3>
+          <h3>HatBeautiful</h3>
           <p>
             Cung cấp sản phẩm chất lượng cao, giao hàng nhanh chóng và chăm sóc
             khách hàng tận tâm.
@@ -15,20 +15,20 @@ const Footer = () => {
         <div className="footer-section">
           <h4>Liên kết</h4>
           <ul>
-            <li><a href="#">Trang chủ</a></li>
-            <li><a href="#">Sản phẩm</a></li>
-            <li><a href="#">Giới thiệu</a></li>
-            <li><a href="#">Liên hệ</a></li>
+            <li><Link to="/">Trang chủ</Link></li>
+            <li><Link to="/products">Sản phẩm</Link></li>
+            <li><Link to="/about">Giới thiệu</Link></li>
+            <li><Link to="/contact">Liên hệ</Link></li>
           </ul>
         </div>
 
         <div className="footer-section">
           <h4>Hỗ trợ</h4>
           <ul>
-            <li><a href="#">Chính sách bảo hành</a></li>
-            <li><a href="#">Đổi trả & Hoàn tiền</a></li>
-            <li><a href="#">Vận chuyển</a></li>
-            <li><a href="#">Câu hỏi thường gặp</a></li>
+            <li><Link to="/warranty-policy">Chính sách bảo hành</Link></li>
+            <li><Link to="/return-policy">Đổi trả & Hoàn tiền</Link></li>
+            <li><Link to="/shipping">Vận chuyển</Link></li>
+            <li><Link to="/faq">Câu hỏi thường gặp</Link></li>
           </ul>
         </div>
 
@@ -41,7 +41,7 @@ const Footer = () => {
       </div>
 
       <div className="footer-bottom">
-        <p>© 2025 ShopName. All rights reserved.</p>
+        <p>© 2025 HatBeautiful. All rights reserved.</p>
       </div>
     </footer>
   );
