@@ -106,8 +106,8 @@ const Contact = () => {
 
           <div className="contact-info">
             <div><strong>Địa chỉ:</strong> 123 Fashion Street, Ho Chi Minh</div>
-            <div><strong>Email:</strong> hello@hatbeautiful.example</div>
-            <div><strong>Hotline:</strong> +84 912 345 678</div>
+            <div><strong>Email:</strong> letonvinh25112004@gmail.com</div>
+            <div><strong>Hotline:</strong> +84 354 790 080</div>
           </div>
 
           <div className="contact-images">
