@@ -12,3 +12,7 @@ justify-content: center;
   max-width: 1400px;
   margin:auto;
 }
+.container_main {
+  min-height: 100vh; /* cao ít nhất bằng chiều cao màn hình, nhưng không dư */
+  padding-bottom: 40px; /* chừa khoảng cho footer nếu cần */
+}

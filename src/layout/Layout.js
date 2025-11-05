@@ -10,7 +10,7 @@ const Layout = () => {
       <Header />
       <Banner />
       <div className="news-home">
-        <div className="container_main" style={{ minHeight: 5500 }}>
+        <div className="container_main" >
           <Outlet />
         </div>
       </div>
