@@ -5,8 +5,10 @@ import Layout from "./layout/Layout";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 //@ts-ignore
 import Product from "./pages/Product";
-//ts-ignore
+//@ts-ignore
 import ProductDetail from "./pages/ProductDetail";
+//@ts-ignore
+import About from "./pages/About";
 export default function App() {
   // return <Home />;
   return (
@@ -16,6 +18,7 @@ export default function App() {
           <Route index path="/" element={<Product />} />
           <Route path="/products" element={<Product />} />
           <Route path="/sanpham/:id" element={<ProductDetail />} />
+          <Route path="/about" element={<About />} />
         </Route>
       </Routes>
     </BrowserRouter>
