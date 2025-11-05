@@ -10,14 +10,13 @@ const ProductDetail = () => {
   const [product, setProduct] = useState(null);
   const [mainImage, setMainImage] = useState(null);
   const [thumbnails, setThumbnails] = useState([]);
+  const [related, setRelated] = useState([]); // <-- danh sách sản phẩm liên quan
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Helper: convert product.image (could be single or CSV) to array
   const parseImages = (imgField) => {
     if (!imgField) return [];
     if (Array.isArray(imgField)) return imgField;
-    // if it's a comma-separated string
     if (typeof imgField === "string" && imgField.includes(",")) {
       return imgField.split(",").map((s) => s.trim()).filter(Boolean);
     }
@@ -29,11 +28,8 @@ const ProductDetail = () => {
 
     const getPublicUrlIfNeeded = async (img) => {
       if (!img) return null;
-      // full url
       if (img.startsWith("http://") || img.startsWith("https://")) return img;
-      // public path (from React public folder)
       if (img.startsWith("/")) return img;
-      // otherwise assume it's a storage object key in bucket 'product-images'
       const bucketName = "product-images";
       try {
         const { data: publicData, error: publicErr } = supabase.storage
@@ -41,12 +37,57 @@ const ProductDetail = () => {
           .getPublicUrl(img);
         if (publicErr) {
           console.warn("Storage getPublicUrl error:", publicErr);
-          return img; // fallback to provided string
+          return img;
         }
         return publicData.publicUrl;
       } catch (e) {
         console.warn("Exception getPublicUrl:", e);
         return img;
+      }
+    };
+
+    const fetchRelated = async (productData, idValue, isIntegerId) => {
+      if (!productData) return;
+      const brand = productData.brand;
+      try {
+        // 1) Thử lấy theo brand (khác id), giới hạn 4
+        let query = supabase
+          .from("hats")
+          .select("*")
+          .neq("id", idValue)
+          .limit(4);
+
+        if (brand) query = query.eq("brand", brand);
+
+        const { data: relatedData, error: relatedErr } = await query;
+        if (relatedErr) {
+          console.warn("Lỗi lấy related theo brand:", relatedErr);
+        }
+
+        let finalRelated = relatedData || [];
+
+        // 2) Nếu chưa đủ 4 item, lấy thêm sản phẩm khác (khác id) để đủ
+        if (finalRelated.length < 4) {
+          const need = 4 - finalRelated.length;
+          // Lấy sản phẩm bất kỳ khác id, exclude những đã lấy
+          const excludeIds = finalRelated.map((r) => r.id).concat([idValue]);
+          // PostgREST: filter ids not in array => using not.in
+          const { data: extra, error: extraErr } = await supabase
+            .from("hats")
+            .select("*")
+            .not("id", "in", `(${excludeIds.join(",")})`)
+            .limit(need);
+
+          if (extraErr) {
+            console.warn("Lỗi lấy extra related:", extraErr);
+          } else {
+            finalRelated = finalRelated.concat(extra || []);
+          }
+        }
+
+        if (!cancelled) setRelated(finalRelated);
+      } catch (e) {
+        console.warn("Exception fetchRelated:", e);
       }
     };
 
@@ -60,8 +101,8 @@ const ProductDetail = () => {
         return;
       }
 
-      // Detect id type: if your id is integer, convert; if uuid, keep string
-      const isIntegerId = true; // set false if your table uses uuid
+      // Chỉnh isIntegerId = true nếu id kiểu integer trong DB
+      const isIntegerId = true;
       const idValue = isIntegerId ? Number(id) : id;
       if (isIntegerId && Number.isNaN(idValue)) {
         setError("ID phải là số hợp lệ.");
@@ -86,13 +127,16 @@ const ProductDetail = () => {
         if (cancelled) return;
         setProduct(data);
 
-        // handle images
+        // xử lý ảnh
         const imgs = parseImages(data?.image);
         const resolved = await Promise.all(imgs.map((i) => getPublicUrlIfNeeded(i)));
         if (!cancelled) {
           setThumbnails(resolved.filter(Boolean));
           setMainImage(resolved[0] || null);
         }
+
+        // Lấy related products
+        await fetchRelated(data, idValue, isIntegerId);
       } catch (e) {
         console.error("fetchProduct exception:", e);
         if (!cancelled) setError("Lỗi khi lấy dữ liệu.");
@@ -109,7 +153,6 @@ const ProductDetail = () => {
   }, [id]);
 
   const addToCart = () => {
-    // placeholder action: you can integrate with cart state/store
     alert(`${product?.name} đã được thêm vào giỏ (demo).`);
   };
 
@@ -175,7 +218,6 @@ const ProductDetail = () => {
               <button className="pd-contact-btn" onClick={() => alert("Liên hệ demo")}>Liên hệ</button>
             </div>
 
-            {/* Example: extra details box */}
             <div className="pd-specs">
               <h3>Thông số</h3>
               <ul>
@@ -188,15 +230,31 @@ const ProductDetail = () => {
           </div>
         </div>
 
-        {/* placeholder related products */}
         <div className="pd-related">
           <h3>Sản phẩm liên quan</h3>
           <div className="pd-related-grid">
-            {/* You can fetch related items later; placeholders for now */}
-            <div className="pd-related-card">Sản phẩm A</div>
-            <div className="pd-related-card">Sản phẩm B</div>
-            <div className="pd-related-card">Sản phẩm C</div>
-            <div className="pd-related-card">Sản phẩm D</div>
+            {related && related.length > 0 ? (
+              related.map((r) => (
+                <div
+                  key={r.id}
+                  className="pd-related-card"
+                  onClick={() => navigate(`/sanpham/${r.id}`)}
+                  role="button"
+                >
+                  <div style={{ height: 120, overflow: "hidden", borderRadius: 8, marginBottom: 8 }}>
+                    <img
+                      src={Array.isArray(r.image) ? r.image[0] : r.image}
+                      alt={r.name}
+                      style={{ width: "100%", height: "100%", objectFit: "cover" }}
+                    />
+                  </div>
+                  <div style={{ fontWeight: 700 }}>{r.name}</div>
+                  <div style={{ color: "#e63946", marginTop: 6 }}>{(r.price || 0).toLocaleString()} VND</div>
+                </div>
+              ))
+            ) : (
+              <div>Không có sản phẩm liên quan.</div>
+            )}
           </div>
         </div>
       </div>
