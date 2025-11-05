@@ -9,6 +9,8 @@ import Product from "./pages/Product";
 import ProductDetail from "./pages/ProductDetail";
 //@ts-ignore
 import About from "./pages/About";
+//@ts-ignore
+import Contact from "./pages/Contact";
 export default function App() {
   // return <Home />;
   return (
@@ -19,6 +21,7 @@ export default function App() {
           <Route path="/products" element={<Product />} />
           <Route path="/sanpham/:id" element={<ProductDetail />} />
           <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
         </Route>
       </Routes>
     </BrowserRouter>
