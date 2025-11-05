@@ -1,54 +1,54 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
 import { supabase } from "../DB/supabaseClient";
 import "./Product.css";
+import { Link } from "react-router-dom";
 
-const Product = () => {
-  const { id } = useParams(); // lấy id từ URL /sanpham/:id
-  const [product, setProduct] = useState(null);
+const ProductList = () => {
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchProduct = async () => {
+    const fetchProducts = async () => {
       const { data, error } = await supabase
-        .from("hats")
-        .select("*")
-        .eq("id", id)
-        .single();
+        .from("hats") // ✅ lấy toàn bộ dữ liệu bảng "hats"
+        .select("*");
 
       if (error) {
-        console.error("Lỗi khi lấy dữ liệu:", error);
+        console.error("Lỗi khi lấy danh sách sản phẩm:", error);
       } else {
-        setProduct(data);
+        setProducts(data);
       }
+      setLoading(false);
     };
 
-    fetchProduct();
-  }, [id]);
+    fetchProducts();
+  }, []);
 
-  if (!product) {
-    return <p>Đang tải dữ liệu...</p>;
+  if (loading) {
+    return <p>Đang tải danh sách sản phẩm...</p>;
   }
 
   return (
-    <div className="product">
-      <h1>{product.name}</h1>
-      <img
-        src={product.image}
-        alt={product.name}
-        className="product-image"
-        style={{ width: "300px", borderRadius: "12px" }}
-      />
-      <p><strong>Giá:</strong> {product.price.toLocaleString()} VND</p>
-      <p><strong>Thương hiệu:</strong> {product.brand}</p>
-      <p><strong>Chất liệu:</strong> {product.material}</p>
-      <p><strong>Kiểu dáng:</strong> {product.style}</p>
-      <p><strong>Giới tính:</strong> {product.gender}</p>
-      <p><strong>Kích cỡ:</strong> {product.size}</p>
-      <p><strong>Ghi chú:</strong> {product.note}</p>
+    <div className="product-list">
+      <h1 className="title">Các Sản Phẩm Nổi Bật</h1>
+      <div className="product-grid">
+        {products.map((product) => (
+          <div key={product.id} className="product-card">
+            <Link to={`/sanpham/${product.id}`}>
+              <img
+                src={product.image}
+                alt={product.name}
+                className="product-image"
+              />
+            </Link>
+            <h3>{product.name}</h3>
+            <p className="price">{product.price.toLocaleString()} VND</p>
+            <p className="brand">{product.brand}</p>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
 
-export default Product;
-
-
+export default ProductList;

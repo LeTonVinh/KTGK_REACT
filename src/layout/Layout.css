@@ -1,0 +1,14 @@
+
+.news-home {
+  background: #4b4646;
+  padding: 40px 0;
+  display: flex;
+justify-content: center;
+}
+
+/* Container chính giữ grid */
+.container_main {
+  width: 90%;
+  max-width: 1400px;
+  margin:auto;
+}

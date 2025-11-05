@@ -1,0 +1,78 @@
+
+/* Grid sản phẩm */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px 40px;
+}
+/* Tiêu đề trang sản phẩm */
+.title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin: 20px 0;
+  color: #886262;
+}
+.title:hover {
+  color: #272424;
+  transition: color 0.3s ease;
+}
+
+/* Ô sản phẩm */
+.product-card {
+  background-color: #7c7777;
+  border-radius: 16px;
+  overflow: hidden; /* tránh viền ảnh tràn ra ngoài */
+  box-shadow: 0 4px 10px rgba(37, 22, 22, 0.08); /* bóng nhẹ */
+  transition: all 0.3s ease; /* hiệu ứng hover */
+  cursor: pointer; /* con trỏ khi hover */
+  display: flex; /* hiển thị flex */
+  flex-direction: column; /* sắp xếp theo cột */
+  align-items: center; /* căn giữa nội dung */
+}
+
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+}
+
+/* Ảnh sản phẩm */
+.product-card img {
+  width: auto;
+  height: 200px;
+  object-fit: cover; /* giữ tỉ lệ ảnh */
+  transition: transform 0.3s ease;
+  margin-top: 15px; 
+  display: block;
+}
+
+.product-card:hover img {
+  transform: scale(1.05);
+}
+
+/* Tên sản phẩm */
+.product-card h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin: 15px 0 8px;
+  color: #dbbfbf;
+  text-align: center;
+  font-weight: bold;
+  padding: 0 10px;
+}
+
+/* Giá */
+.product-card .price {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #574345;
+  margin-bottom: 6px;
+}
+
+/* Thương hiệu */
+.product-card .brand {
+  font-size: 0.9rem;
+  color: #c71f1f;
+  margin-bottom: 12px;
+}
+
