@@ -215,3 +215,10 @@
     object-fit: contain;
   }
 }
+.pd-contact-btn {
+  background: transparent;
+  border: 1px solid #2b4368;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+}
