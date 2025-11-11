@@ -152,9 +152,55 @@ const ProductDetail = () => {
     };
   }, [id]);
 
-  const addToCart = () => {
-    alert(`${product?.name} đã được thêm vào giỏ (demo).`);
-  };
+  
+const addToCart = async () => {
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) {
+    alert("Vui lòng đăng nhập để thêm vào giỏ.");
+    return;
+  }
+
+  // Kiểm tra nếu sản phẩm đã tồn tại trong giỏ
+  const { data: existing, error: checkErr } = await supabase
+    .from("carts")
+    .select("id, quantity")
+    .eq("user_id", user.id)
+    .eq("product_id", product.id)
+    .single();
+
+  if (checkErr && checkErr.code !== "PGRST116") { // 116 = not found
+    console.error(checkErr);
+    alert("Lỗi khi thêm vào giỏ.");
+    return;
+  }
+
+  if (existing) {
+    // Cập nhật quantity
+    const { error: updateErr } = await supabase
+      .from("carts")
+      .update({ quantity: existing.quantity + 1 })
+      .eq("id", existing.id);
+
+    if (updateErr) {
+      console.error(updateErr);
+      alert("Lỗi khi cập nhật giỏ hàng.");
+    } else {
+      alert(`${product.name} đã được tăng số lượng trong giỏ.`);
+    }
+  } else {
+    // Thêm mới
+    const { error: insertErr } = await supabase
+      .from("carts")
+      .insert([{ user_id: user.id, product_id: product.id, quantity: 1 }]);
+
+    if (insertErr) {
+      console.error(insertErr);
+      alert("Lỗi khi thêm vào giỏ.");
+    } else {
+      alert(`${product.name} đã được thêm vào giỏ.`);
+    }
+  }
+};
 
   if (loading) return <div className="pd-loading">Đang tải...</div>;
   if (error) return <div className="pd-error">{error}</div>;
