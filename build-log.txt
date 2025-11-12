@@ -1,0 +1,52 @@
+npm verbose cli C:\Program Files\nodejs\node.exe C:\Program Files\nodejs\node_modules\npm\bin\npm-cli.js
+npm info using npm@10.9.2
+npm info using node@v22.13.0
+npm verbose title npm run build
+npm verbose argv "--loglevel" "verbose" "run" "build"
+npm verbose logfile logs-max:10 dir:C:\Users\vinhj\AppData\Local\npm-cache\_logs\2025-11-12T04_13_38_713Z-
+npm verbose logfile C:\Users\vinhj\AppData\Local\npm-cache\_logs\2025-11-12T04_13_38_713Z-debug-0.log
+
+> react_ktgk@0.1.0 build
+> react-scripts build
+
+Creating an optimized production build...
+Compiled with warnings.
+
+[eslint] 
+src\Auth\Singup.js
+  Line 18:13:  'data' is assigned a value but never used  no-unused-vars
+
+src\layout\Banner.js
+  Line 11:9:  Do not use <marquee> elements as they can create visual accessibility issues and are deprecated  jsx-a11y/no-distracting-elements
+
+src\pages\Contact.js
+  Line 56:15:  'data' is assigned a value but never used  no-unused-vars
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+File sizes after gzip:
+
+  125.31 kB  build\static\js\main.722ec61f.js
+  3.33 kB    build\static\css\main.a72f54e6.css
+  1.76 kB    build\static\js\453.e982a2f5.chunk.js
+
+The project was built assuming it is hosted at /.
+You can control this with the homepage field in your package.json.
+
+The build folder is ready to be deployed.
+You may serve it with a static server:
+
+  npm install -g serve
+  serve -s build
+
+Find out more about deployment here:
+
+  https://cra.link/deployment
+
+npm verbose cwd E:\MyProjects\react_ktgk
+npm verbose os Windows_NT 10.0.26200
+npm verbose node v22.13.0
+npm verbose npm  v10.9.2
+npm verbose exit 0
+npm info ok
