@@ -52,8 +52,8 @@ const Contact = () => {
         created_at: new Date().toISOString(),
       };
 
-      // Nếu bạn chưa tạo bảng "contacts", Supabase sẽ trả lỗi. Nhưng component vẫn OK.
-      const { data, error: sbError } = await supabase
+      
+      const {  error: sbError } = await supabase
         .from("contacts")
         .insert([payload]);
 

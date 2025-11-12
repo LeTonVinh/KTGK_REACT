@@ -7,24 +7,42 @@
   border-top: 4px solid #444;
   border-bottom: 4px solid #444;
 }
+
 .banner-content h1 {
-font-size: 48px;
+  font-size: 48px;
 }
-/* wrapper marquee */
+
+/* wrapper */
 .banner-images {
   overflow: hidden;
   width: 100%;
   background-color: #222;
+  position: relative;
+  height: 350px;
 }
 
-/* loại khoảng trắng giữa inline elements: đặt img thành block hoặc inline-block no whitespace */
+/* track animation */
+.scrolling-track {
+  display: flex;
+  width: max-content;
+  animation: scroll-left 20s linear infinite;
+}
+
+/* ảnh banner */
 .banner-img {
   height: 350px;
   width: 500px;
-  display: inline-block; /* loại bỏ khoảng trắng giữa các ảnh */
-  background-color: white;
-  object-fit: contain; /* giữ tỉ lệ ảnh */
+  object-fit: contain;
   border: 4px solid #222;
+  margin-right: 10px;
 }
 
-
+/* animation keyframes */
+@keyframes scroll-left {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
